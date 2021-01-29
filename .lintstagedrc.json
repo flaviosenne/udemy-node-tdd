@@ -1,7 +1,5 @@
 {
-    "*.ts":[
-        "yarn test:staged",
-        
+    "*.ts":[        
         "git add"
     ]
 }
