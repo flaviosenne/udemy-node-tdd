@@ -1,24 +1,30 @@
 
-import { Collection, MongoClient } from "mongodb"
+import mongo from "mongoose"
 
-export const MongoHelper = {
-    client: null as MongoClient,
-    async connect(url: string): Promise<void>{
-        this.client = await MongoClient.connect(url, {
-            useNewUrlParser: true
-        })
-    },
-    async disconnect(): Promise<void>{
-        await this.client.close()
-    },
-
-    getCollection(name: string): Collection{
-        return this.client.db().collection(name)
-    },
-    map: (collection: any): any =>{
-    
-        const {_id, ...collectiontWhitoutId} = collection
-            
-        return Object.assign({}, collectiontWhitoutId,{id: _id})
+export class MongoHelper {
+   
+    async connect(url: string): Promise<void> {
+        mongo.connect(url, { useNewUrlParser: true })
     }
+    async disconnect(): Promise<void> {
+        mongo.disconnect()
+    }
+
+    getCollection(name: string): any {
+
+        return mongo.model(name, new mongo.Schema({
+            name: String,
+            email: String,
+            password: String,
+        }))
+
+
+    }
+    map(collection: any): any {
+
+        const { _id, ...collectiontWhitoutId } = collection
+
+        return Object.assign({}, collectiontWhitoutId, { id: _id })
+    }
+
 }

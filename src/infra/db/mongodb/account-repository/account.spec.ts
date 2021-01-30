@@ -1,18 +1,8 @@
-import {MongoHelper}from '../helpers/mongo-helper'
+// import {MongoHelper}from '../helpers/mongo-helper'
 import { AccountMongoRepository } from './account'
 describe('Account Mongo Repository', ()=>{
     
-    beforeAll(async () => {
-       await MongoHelper.connect('mongodb+srv://jest:jest@jest.zooie.mongodb.net/jest?retryWrites=true&w=majority')
-    })
-    afterAll(async() => {
-        await MongoHelper.disconnect()
-    })
-    beforeEach(async ()=> {
-        const accountCollection = MongoHelper.getCollection('accounts')
-        await accountCollection.deleteMany({})
-    })
-
+  
     const makeSut = ():AccountMongoRepository => {
         return new AccountMongoRepository()
     }
