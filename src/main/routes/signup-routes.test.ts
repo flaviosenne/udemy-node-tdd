@@ -11,14 +11,16 @@ describe('Signup Routes', ()=> {
     })
 
     it('Should return an account on success', async()=> {
-        await request(app)
+        const result = await request(app)
         .post('/api/signup')
         .send({
-            name: 'joao',
+            name: 'joao flavio',
             email: 'joao@email.com',
-            password: '1234',
-            passwordConfirmation: '1234',
+            password: 'joao',
+            passwordConfirmation: 'joao',
         })
-        .expect(200)
+
+        expect(result.status).toEqual(200)
+       
     })
 })

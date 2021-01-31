@@ -1,5 +1,5 @@
 
-import mongoose from "mongoose"
+import mongoose, { Model } from "mongoose"
 
 class MongoHelper {
     constructor() {
@@ -15,9 +15,6 @@ class MongoHelper {
     }
     async disconnect(): Promise<void> {
         mongoose.disconnect()
-        mongoose.connection.on('disconnected', () =>
-            console.log(`Mongoose! desconectado`)
-        )
     }
 
     getCollection(collection: string): any {
@@ -30,11 +27,13 @@ class MongoHelper {
 
 
     }
-    // map(collection: any): any {
+    map(collection: any): any {
 
-    //     const { _id, ...collectiontWhitoutId } = collection
+        const { _id, ...collectiontWhitoutId } = collection
 
-    //     return Object.assign({}, collectiontWhitoutId, { id: _id })
-    // }
+        Object.assign({}, collectiontWhitoutId, { id: _id })
+        const {id, name, email, password} = collectiontWhitoutId
+        return {id, name, email, password}
+    }
 }
 export default new MongoHelper()
