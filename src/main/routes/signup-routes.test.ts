@@ -7,9 +7,9 @@ describe('Signup Routes', ()=> {
         await MongoHelper.connect('mongodb+srv://jest:jest@jest.zooie.mongodb.net/jest?retryWrites=true&w=majority')
     })
     afterAll(async () => {
-        await MongoHelper.connect('mongodb+srv://jest:jest@jest.zooie.mongodb.net/jest?retryWrites=true&w=majority')
+        await MongoHelper.disconnect()
     })
-    
+
     it('Should return an account on success', async()=> {
         await request(app)
         .post('/api/signup')
