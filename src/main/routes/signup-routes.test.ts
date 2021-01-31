@@ -4,7 +4,7 @@ import app from '../config/app'
 
 describe('Signup Routes', ()=> {
     beforeAll(async () => {
-        await MongoHelper.connect('mongodb+srv://jest:jest@jest.zooie.mongodb.net/jest?retryWrites=true&w=majority')
+        await MongoHelper.connect('mongodb://localhost:27017/jest')
     })
     afterAll(async () => {
         await MongoHelper.disconnect()

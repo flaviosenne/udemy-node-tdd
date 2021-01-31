@@ -1,5 +1,5 @@
 
-import mongoose, { Model } from "mongoose"
+import mongoose from "mongoose"
 
 class MongoHelper {
     constructor() {
@@ -24,8 +24,6 @@ class MongoHelper {
             email: String,
             password: String,
         }))
-
-
     }
     map(collection: any): any {
 
