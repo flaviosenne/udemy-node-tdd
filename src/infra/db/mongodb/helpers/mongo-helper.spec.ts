@@ -9,7 +9,10 @@ describe('Mongo Helper', ()=> {
 
     })
     it('Should reconnect if mongodb is down', async ()=> {
-        const accountCollection = sut.getCollection('account')
+        let accountCollection = sut.getCollection('account')
+        expect(accountCollection).toBeTruthy()
+        await sut.disconnect()
+        accountCollection = sut.getCollection('account')
         expect(accountCollection).toBeTruthy()
     })
 })

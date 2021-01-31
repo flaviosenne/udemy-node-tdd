@@ -1,11 +1,13 @@
 
-import mongoose from "mongoose"
+import mongoose, { Model} from "mongoose"
 
 class MongoHelper {
+    uri: string
     constructor() {
 
     }
     async connect(url: string): Promise<void> {
+        this.uri = url
         mongoose.connect(url,
             { useNewUrlParser: true, useUnifiedTopology: true })
 
@@ -17,8 +19,8 @@ class MongoHelper {
         mongoose.disconnect()
     }
 
-    getCollection(collection: string): any {
-
+    async getCollection(collection: string): Promise<any> {
+        await this.connect(this.uri)
         return mongoose.model(collection, new mongoose.Schema({
             name: String,
             email: String,
