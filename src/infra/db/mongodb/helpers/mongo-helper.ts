@@ -1,18 +1,20 @@
 
-import mongo from "mongoose"
+import mongoose from "mongoose"
 
-export class MongoHelper {
-   
+class MongoHelper {
+    constructor() {
+
+    } 
     async connect(url: string): Promise<void> {
-        mongo.connect(url, { useNewUrlParser: true })
+        mongoose.connect(url, { useNewUrlParser: true })
     }
     async disconnect(): Promise<void> {
-        mongo.disconnect()
+        mongoose.disconnect()
     }
 
-    getCollection(name: string): any {
+    getCollection(collection: string): any {
 
-        return mongo.model(name, new mongo.Schema({
+        return mongoose.model(collection, new mongoose.Schema({
             name: String,
             email: String,
             password: String,
@@ -20,11 +22,11 @@ export class MongoHelper {
 
 
     }
-    map(collection: any): any {
+    // map(collection: any): any {
 
-        const { _id, ...collectiontWhitoutId } = collection
+    //     const { _id, ...collectiontWhitoutId } = collection
 
-        return Object.assign({}, collectiontWhitoutId, { id: _id })
-    }
-
+    //     return Object.assign({}, collectiontWhitoutId, { id: _id })
+    // }
 }
+export default new MongoHelper()
