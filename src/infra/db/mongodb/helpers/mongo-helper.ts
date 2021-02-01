@@ -1,5 +1,5 @@
 
-import mongoose, { Model} from "mongoose"
+import mongoose from "mongoose"
 
 class MongoHelper {
     uri: string
