@@ -1,3 +1,4 @@
+import { Authentication } from './../../../domain/usecases/authentication';
 import { serverError } from './../../helpers/http-helpers';
 import { InvalidParamError } from './../../errors/invalid-param-error';
 import { EmailValidator } from './../../protocols/email-validator';
@@ -13,6 +14,14 @@ describe('Login Controller', () => {
         }
         return new EmailValidatorStub()
     }
+    const makeAuthentication = (): Authentication =>{
+        class AuthenticationStub implements Authentication {
+            async auth(email: string, password: string):  Promise<string>{
+                return new Promise(resolve => resolve('any_token'))
+            }
+        }
+        return new AuthenticationStub()
+    }
     const makeFakeHttpRequest = (): any=> ({
         body: {
             email:'valid_email@mail.com',
@@ -22,11 +31,13 @@ describe('Login Controller', () => {
     interface SutTypes {
         sut: LoginController,
         emailValidatorStub: EmailValidator
+        authenticationStub: Authentication
     }
     const makeSut = (): SutTypes => {
         const emailValidatorStub = makeEmailValidator()
-        const sut= new LoginController(emailValidatorStub)
-        return {sut, emailValidatorStub}
+        const authenticationStub = makeAuthentication()
+        const sut= new LoginController(emailValidatorStub, authenticationStub)
+        return {sut, emailValidatorStub, authenticationStub}
     }
 
     it('Should return 400 if no email is provided', async () => {
@@ -69,5 +80,11 @@ describe('Login Controller', () => {
         })
         const httpResponse = await sut.handle(makeFakeHttpRequest())
         expect(httpResponse).toEqual(serverError(new Error))
+    })
+    it('Should call authetication with correct values 500 if EmailValidator throws',async()=>{
+        const { sut, authenticationStub} = makeSut()
+        const authSpy = jest.spyOn(authenticationStub, 'auth')
+        await sut.handle(makeFakeHttpRequest())
+        expect(authSpy).toHaveBeenCalledWith('valid_email@mail.com', 'valid_password')
     })
 })
