@@ -3,12 +3,16 @@ import { Controller } from './../../protocols';
 import { LoginController } from "./login"
 import { badRequest } from '../../helpers/http-helpers'
 describe('Login Controller', () => {
-    const makeSut = (): Controller => {
-        return new LoginController()
+    interface SutTypes {
+        sut: LoginController
+    }
+    const makeSut = (): SutTypes => {
+        const sut= new LoginController()
+        return {sut}
     }
 
     it('Should return 400 if no enail is provided', async () => {
-        const sut = makeSut()
+        const {sut} = makeSut()
         const httpRequest = {
             body: {
                 // email:'email_valid@mail.com',
@@ -19,7 +23,7 @@ describe('Login Controller', () => {
         expect(httpResponse).toEqual(badRequest(new MissingParamError('email')))
     })
     it('Should return 400 if no password is provided', async () => {
-        const sut = makeSut()
+        const {sut }= makeSut()
         const httpRequest = {
             body: {
                 email: 'email_valid@mail.com'
