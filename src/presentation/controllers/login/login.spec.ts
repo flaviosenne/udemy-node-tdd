@@ -1,7 +1,6 @@
 import { InvalidParamError } from './../../errors/invalid-param-error';
 import { EmailValidator } from './../../protocols/email-validator';
 import { MissingParamError } from './../../errors/missing-param-error';
-import { Controller } from './../../protocols';
 import { LoginController } from "./login"
 import { badRequest } from '../../helpers/http-helpers'
 describe('Login Controller', () => {
@@ -13,6 +12,12 @@ describe('Login Controller', () => {
         }
         return new EmailValidatorStub()
     }
+    const makeFakeHttpRequest = (): any=> ({
+        body: {
+            email:'valid_email@mail.com',
+            password:'valid_password',
+        }
+    })
     interface SutTypes {
         sut: LoginController,
         emailValidatorStub: EmailValidator
@@ -23,7 +28,7 @@ describe('Login Controller', () => {
         return {sut, emailValidatorStub}
     }
 
-    it('Should return 400 if no enail is provided', async () => {
+    it('Should return 400 if no email is provided', async () => {
         const {sut} = makeSut()
         const httpRequest = {
             body: {
@@ -47,26 +52,13 @@ describe('Login Controller', () => {
     it('Should return 400 if an invalid email is provided',async()=>{
         const { sut, emailValidatorStub} = makeSut()
         jest.spyOn(emailValidatorStub, `isValid`).mockReturnValueOnce(false)
-        const httpRequest ={
-            body: {
-                email:'valid_email@mail.com',
-                password:'valid_password',
-            }
-        }
-        const httpResponse = await sut.handle(httpRequest)
+        const httpResponse = await sut.handle(makeFakeHttpRequest())
         expect(httpResponse).toEqual(badRequest(new InvalidParamError('email')))
-    })
-    
+    })    
     it('Should call EmailValidator with correct email',async()=>{
         const { sut, emailValidatorStub} = makeSut()
         const isValidSpy = jest.spyOn(emailValidatorStub, 'isValid')
-        const httpRequest ={
-            body: {
-                email:'valid_email@mail.com',
-                password:'valid_password'
-            }
-        }
-        await sut.handle(httpRequest)
+        await sut.handle(makeFakeHttpRequest())
         expect(isValidSpy).toHaveBeenCalledWith('valid_email@mail.com')
     })
 })
