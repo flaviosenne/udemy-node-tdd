@@ -2,7 +2,7 @@ import { MissingParamError } from './../../errors/missing-param-error';
 import { Validation } from './validation';
 import { ValidationComposite } from './validation-composite';
 
-const makeValidation = (): Validation{
+const makeValidation = (): Validation =>{
     class ValidationStub implements Validation {
         validate(input: any): Error {
             return null
