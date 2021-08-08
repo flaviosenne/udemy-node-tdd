@@ -1,13 +1,16 @@
+import { HttpRequest } from "../protocols/http"
 import { SignUpController } from "./signup"
 
 describe('Signup Controller', ()=> {
     it('Should return 400 if no name is provider',()=> {
         const sut = new SignUpController()
 
-        const httpRequest = {
-            email:'any_email@mail.com',
-            password:'any_password',
-            passwordConfirmation: 'any_password'
+        const httpRequest: HttpRequest = {
+            body: {
+                email:'any_email@mail.com',
+                password:'any_password',
+                passwordConfirmation: 'any_password'
+            }
         }
         const httpResponse = sut.handle(httpRequest)
         expect(httpResponse.statusCode).toBe(400)
@@ -18,9 +21,11 @@ describe('Signup Controller', ()=> {
         const sut = new SignUpController()
 
         const httpRequest = {
-            name: 'any_name',
-            password:'any_password',
-            passwordConfirmation: 'any_password'
+            body: {
+                name: 'any_name',
+                password:'any_password',
+                passwordConfirmation: 'any_password'
+            }
         }
         const httpResponse = sut.handle(httpRequest)
         expect(httpResponse.statusCode).toBe(400)
